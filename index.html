@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Natal, Mónica!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #1a472a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: white;
+            font-size: 1.5em;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #c41e3a;
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .name {
+            color: #2d5a3d;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            color: #555;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .photo-frame:last-child {
+            grid-column: 1 / -1;
+        }
+
+        .photo-frame {
+            position: relative;
+            background: #f5f5f5;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+        }
+
+        .photo-frame:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #c41e3a, #e63946);
+            color: white;
+            font-size: 3em;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #c41e3a, #e63946);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.8em;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(196, 30, 58, 0.6);
+        }
+
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+
+        .music-btn.playing {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(196, 30, 58, 0.8);
+            }
+        }
+
+        .ornament {
+            display: inline-block;
+            margin: 0 10px;
+            color: #c41e3a;
+            font-size: 1.5em;
+        }
+
+        @media (max-width: 600px) {
+            .photos-grid {
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header .name {
+                font-size: 1.4em;
+            }
+
+            .header p {
+                font-size: 0.95em;
+            }
+
+            .footer {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="natalMusic" loop>
+        <source src="natal.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="musicBtn" class="music-btn" title="Música de Natal">🎵</button>
+
+    <div class="card">
+        <div class="header">
+            <h1>🎄 Feliz Natal! 🎄</h1>
+            <div class="name">Família Mónica</div>
+            <p>
+                Que este Natal seja repleto de alegria, amor e momentos especiais. 
+                Aqui estão algumas memórias maravilhosas para celebrar esta época mágica!
+            </p>
+        </div>
+
+        <div class="photos-grid" id="photosGrid"></div>
+
+        <div class="footer">
+            <span class="ornament">❄</span>
+            Com todo o carinho e os melhores votos para 2025!
+            <span class="ornament">❄</span>
+        </div>
+    </div>
+
+    <script>
+        // Controle de música
+        const music = document.getElementById('natalMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
+
+        // Tentar tocar automaticamente ao carregar
+        window.addEventListener('load', () => {
+            music.play().then(() => {
+                isPlaying = true;
+                musicBtn.classList.add('playing');
+                musicBtn.textContent = '🔊';
+            }).catch(() => {
+                // Autoplay bloqueado - mostrar botão para usuário clicar
+                musicBtn.textContent = '🎵';
+            });
+        });
+
+        // Controle manual da música
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                music.pause();
+                musicBtn.textContent = '🎵';
+                musicBtn.classList.remove('playing');
+                isPlaying = false;
+            } else {
+                music.play();
+                musicBtn.textContent = '🔊';
+                musicBtn.classList.add('playing');
+                isPlaying = true;
+            }
+        });
+
+        // Criar flocos de neve
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            snowflake.style.fontSize = (Math.random() * 1 + 0.5) + 'em';
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 8000);
+        }
+
+        setInterval(createSnowflake, 300);
+
+        // Criar galeria de fotos
+        const photosGrid = document.getElementById('photosGrid');
+        const photoIcons = ['🎁', '⭐', '🎅', '🔔', '🕯️', '🎀', '🌟'];
+        
+        for (let i = 1; i <= 7; i++) {
+            const frame = document.createElement('div');
+            frame.className = 'photo-frame';
+            
+            // Tenta carregar a imagem da pasta fotos
+            const img = document.createElement('img');
+            img.src = `fotos/foto${i}.jpg`;
+            img.alt = `Foto ${i}`;
+            
+            // Placeholder caso a imagem não exista
+            img.onerror = function() {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'photo-placeholder';
+                placeholder.textContent = photoIcons[i - 1];
+                frame.innerHTML = '';
+                frame.appendChild(placeholder);
+            };
+            
+            frame.appendChild(img);
+            photosGrid.appendChild(frame);
+            
+            // Animação de entrada
+            frame.style.opacity = '0';
+            frame.style.animation = `fadeIn 0.6s ease-in ${i * 0.1}s forwards`;
+        }
+
+        // Adicionar efeito de clique nas fotos
+        document.addEventListener('DOMContentLoaded', () => {
+            const frames = document.querySelectorAll('.photo-frame');
+            frames.forEach(frame => {
+                frame.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
